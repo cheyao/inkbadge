@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "inkbadge")(type "KiCad")(uri "${KIPRJMOD}/inkbadge.pretty")(options "")(descr ""))
+)
