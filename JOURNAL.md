@@ -36,3 +36,23 @@ Finished most of the schematic!!!
 ![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/f1e30d6dd8b0103ce4ff3e44be9867e0d6627e12_image.png)
 
 - 1h
+
+----------
+
+# 01/06/25
+
+Layed out the connector side of the PCB! acon ghosted me tho :skulk: 
+
+![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/eedf6f3d0cab23514147eade4f7a00ca821b5833_image.png)
+
+- 0.5h
+
+----------
+
+# 01/06/25
+
+And here's the current progress!
+
+![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/d0f0a335fc296bd83a07ffeb9d948a8a14a64483_image.png)
+
+- 1h
