@@ -49,10 +49,30 @@ Layed out the connector side of the PCB! acon ghosted me tho :skulk:
 
 ----------
 
-# 01/06/25
+# 03/06/25
 
 And here's the current progress!
 
 ![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/d0f0a335fc296bd83a07ffeb9d948a8a14a64483_image.png)
 
 - 1h
+
+----------
+
+# 05/06/25
+
+Forgot to journal yesterday, but this is what I got today
+
+![](img/img1.png)
+
+- 1h
+
+----------
+
+# 06/06/25
+
+Made the rough outline w/acon, looks pretty good!
+
+![](img/img1.png)
+
+- 1.5h
