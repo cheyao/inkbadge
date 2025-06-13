@@ -73,6 +73,31 @@ Forgot to journal yesterday, but this is what I got today
 
 Made the rough outline w/acon, looks pretty good!
 
-![](img/img1.png)
+![](img/img2.png)
+![](img/img3.png)
 
 - 1.5h
+
+----------
+
+# 08-09/06/25
+
+And the programmer is done!
+
+![](img/img4.png)
+
+- 4h
+
+----------
+
+# 11/06/25
+
+Finished the programmer!
+
+![](img/img5.png)
+
+- 1h
+
+----------
+
+# 13/06/25

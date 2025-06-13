@@ -62,7 +62,7 @@
 			(type solid)
 		)
 		(fill no)
-		(layer "Margin")
+		(layer "F.CrtYd")
 		(uuid "da442304-1992-42e8-a4ca-97a66efa634b")
 	)
 	(fp_text user "I/O here"
@@ -209,4 +209,15 @@
 		(uuid "3e747b22-cf47-4b22-aeeb-657db53b03fe")
 	)
 	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Connector_Card.3dshapes/microSD_HC_Hirose_DM3D-SF.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1.3 1.3 1.3)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
 )
