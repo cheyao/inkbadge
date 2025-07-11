@@ -69,51 +69,63 @@ constexpr const int BUTTON_4 = 0;
 
 #include <SPI.h>
 #include <SPISlave.h>
-#include <SdFat_Adafruit_Fork.h>
 #include <Adafruit_EPD.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ImageReader_EPD.h>
+#include <Adafruit_NeoPixel.h>
 
 Adafruit_SSD1680 display(296, 128, _DC_EPD, _RESET_EPD, _CS_EPD, _CS_SRAM, _BUSY_EPD, &SPI);
 
-SdFat SD;
-Adafruit_ImageReader_EPD reader(SD);
-
-volatile bool recvBuffReady = false;
-char recvBuff[45] = "";
-int recvIdx = 0;
-void recvCallback(uint8_t *data, size_t len) {
-  memcpy(recvBuff + recvIdx, data, len);
-  recvIdx += len;
-  if (recvIdx == sizeof(recvBuff)) {
-    recvBuffReady = true;
-    recvIdx = 0;
-  }
-}
-
 SPISettings spisettings(1000000, MSBFIRST, SPI_MODE0);
 
-#define SD_CONFIG SdSpiConfig(_CS_SD, SHARED_SPI, SD_SCK_MHZ(1000000), &SPI1)
-
-#include <Adafruit_NeoPixel.h>
 Adafruit_NeoPixel stripl = Adafruit_NeoPixel(3, NEOPIXEL_L, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel stripr = Adafruit_NeoPixel(3, NEOPIXEL_R, NEO_GRB + NEO_KHZ800);
 
-void setup1() {
-  SPISlave.setTX(_MISO_PGM);
-  SPISlave.setRX(_MOSI_PGM);
-  SPISlave.setSCK(_CLK_PGM);
-  SPISlave.setCS(_CS_PGM);
+void setup1() {}
 
-  // Ensure we start with something to send...
-  // sentCallback();
-  // Hook our callbacks into the slave
-  SPISlave.onDataRecv(recvCallback);
-  // SPISlave1.onDataSent(sentCallback);
-  SPISlave.begin(spisettings);
-  delay(3000);
-  Serial.println("S-INFO: SPISlave started");
+void drawBMPFromMemory(const uint8_t *bmpData) {
+  if (bmpData[0] != 'B' || bmpData[1] != 'M') {
+    Serial.println("Not a valid BMP file");
+    return;
+  }
+
+  uint32_t pixelOffset = bmpData[10] | (bmpData[11] << 8) | (bmpData[12] << 16) | (bmpData[13] << 24);
+  int32_t width = bmpData[18] | (bmpData[19] << 8) | (bmpData[20] << 16) | (bmpData[21] << 24);
+  int32_t height = bmpData[22] | (bmpData[23] << 8) | (bmpData[24] << 16) | (bmpData[25] << 24);
+  uint16_t bpp = bmpData[28] | (bmpData[29] << 8);
+
+  if (bpp != 24) {
+    Serial.print("Unsupported BMP bit depth: ");
+    Serial.println(bpp);
+    return;
+  }
+
+  Serial.print("Drawing BMP from memory: ");
+  Serial.print(width);
+  Serial.print("x");
+  Serial.println(height);
+
+  // Each row is aligned to 4 bytes
+  uint32_t rowSize = ((width * 3 + 3) / 4) * 4;
+
+  // Draw bottom-up (BMP stores pixels from bottom row to top)
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      uint32_t pixelIndex = pixelOffset + (height - 1 - y) * rowSize + x * 3;
+      uint8_t b = bmpData[pixelIndex];
+      uint8_t g = bmpData[pixelIndex + 1];
+      uint8_t r = bmpData[pixelIndex + 2];
+
+      // Simple brightness thresholding to black or white
+      uint8_t brightness = (r + g + b) / 3;
+      uint16_t color = (brightness > 128) ? EPD_WHITE : EPD_BLACK;
+
+      display.drawPixel(x, y, color);
+    }
+  }
 }
+
+#include "badge.h"
 
 void reDraw() {
   // NOTE: set rotation of display here, idk what the correct setting it is on the hardware
@@ -122,69 +134,25 @@ void reDraw() {
   display.clearBuffer();
   display.fillScreen(EPD_WHITE);
 
-  display.setTextWrap(true);
-  display.setCursor(10, 10);
-  display.setTextSize(2);
-  display.setTextColor(EPD_BLACK);
-  display.print("Hack Club Undercity");
+  Serial.println("Image loaded successfully!");
+  drawBMPFromMemory(badge_bmp);
   display.display();
-
-  delay(2000);
-
-  Serial.print("Loading image");
-
-  ImageReturnCode stat = reader.drawBMP((char *)"/badge.bmp", display, 0, 0);
-
-  if (stat == IMAGE_SUCCESS) {
-    Serial.println("Image loaded successfully!");
-    display.display();
-  } else {
-    Serial.print("Image loading failed: ");
-    reader.printStatus(stat);
-    display.clearBuffer();
-    display.fillScreen(EPD_WHITE);
-    display.setCursor(10, 10);
-    display.setTextSize(1);
-    display.setTextColor(EPD_BLACK);
-    display.print("Error loading image!");
-    display.display();
-  }
 
   delay(2000);
 
   Serial.println("Loading name.");
   display.setTextWrap(true);
-  display.setCursor(10, 40);
+  display.setCursor(10, 10);
   display.setTextSize(2);
   display.setTextColor(EPD_BLACK);
-  File32 name = SD.open("name.txt");
-  String s = "";
-  if (name) {
-    Serial.println("name.txt:");
-
-    while (name.available()) {
-      s += name.read();
-    }
-    Serial.println(s);
-    display.print(s);
-
-    name.close();
-  } else {
-    Serial.println("Error opening name.txt");
-    display.print("NONAME");
-  }
-
+  display.print("NONAME");
   display.display();
 
   delay(2000);
 }
-
-#include "badge.h"
 void setup() {
   // Open serial communications and wait for port to open
   Serial.begin(115200);
-  pinMode(_MISO_PGM, OUTPUT);
-  digitalWrite(_MISO_PGM, 1);
 
   stripr.begin();
   stripr.setBrightness(50);
@@ -193,38 +161,11 @@ void setup() {
   stripl.setBrightness(50);
   stripl.show();
 
-  while (!Serial) {
-    delay(1); // wait for serial port to connect. Needed for native USB port only (aka the rp2350 i think maybe, idk it was in the example rp2350 code)
-  }
-
-  Serial.println("\nInitializing SD card...");
-
   // Set up SPI pins for the SD card
   SPI1.setMISO(_MISO_SD);
   SPI1.setMOSI(_MOSI_SD);
   SPI1.setSCK(_SCK_SD);
   SPI1.setCS(_CS_SD);
-
-  if (!SD.begin(SD_CONFIG)) {
-    Serial.println("SD initialization failed!");
-  } else {
-    Serial.println("SD initialization done.");
-  }
-
-  // FAQ THIS IMA BRUTE FORCE THIS I DONT CARE IF SDCARDS DIE
-  File32 badge_bmp = SD.open("badge.bmp", FILE_WRITE);
-
-  // if the file opened okay, write to it:
-  if (badge_bmp) {
-    Serial.print("Writing to badge.bmp...");
-    badge_bmp.print(badge_bmp, badge_bmp_len);
-    // close the file:
-    badge_bmp.close();
-    Serial.println("Done saving pic.");
-  } else {
-    // if the file didn't open, print an error:
-    Serial.println("Error opening badge.bmp");
-  }
 
   Serial.println("Opening display");
   display.begin();
@@ -244,6 +185,7 @@ void colorWipe(uint32_t c, uint8_t wait) {
 
 void loop() {
   // Read programmer for flashes
+  /*
   if (recvBuffReady) {
     Serial.println("Loading name.");
     File32 name = SD.open("name.txt", FILE_WRITE);
@@ -257,35 +199,15 @@ void loop() {
       Serial.println("Done saving name.");
     } else {
       // if the file didn't open, print an error:
-      Serial.println("Error opening test.txt");
-    }
-
-    reDraw();
-  }
-
-  colorWipe(stripl.Color(255, 0, 0), 50); // Red
-  colorWipe(stripl.Color(0, 255, 0), 50); // Green
-  colorWipe(stripl.Color(0, 0, 255), 50); // Blue
-
-  // IMG
-  /*
-  if (recvBuffReady && !mode) {
-    Serial.println("Loading image.");
-    File32 name = SD.open("badge.bmp", FILE_WRITE);
-
-    // if the file opened okay, write to it:
-    if (name) {
-      Serial.print("Writing to badge.bmp...");
-      name.print(recvBuff);
-      // close the file:
-      name.close();
-      Serial.println("Done saving pic.");
-    } else {
-      // if the file didn't open, print an error:
-      Serial.println("Error opening test.txt");
+      Serial.println("Error opening name.txt");
     }
 
     reDraw();
   }
   */
+
+  colorWipe(stripl.Color(255, 0, 0), 50); // Red
+  colorWipe(stripl.Color(0, 255, 0), 50); // Green
+  colorWipe(stripl.Color(0, 0, 255), 50); // Blue
+
 }
