@@ -84,48 +84,21 @@ void setup() {
   
 void loop() {
     unsigned char fen_L,fen_H,miao_L,miao_H; 
+
     /************Fast picture display(1.5s)*******************/
     EPD_HW_Init_Fast(); //EPD init Fast
     EPD_WhiteScreen_ALL_Fast(gImage_1);//EPD_picture1
     EPD_DeepSleep();//EPD_DeepSleep,Sleep instruction is necessary, please do not delete!!!
     delay(2000); //2s  
-    EPD_HW_Init_Fast(); //EPD init Fast
-    EPD_WhiteScreen_ALL_Fast(gImage_2);//EPD_picture1
-    EPD_DeepSleep();//EPD_DeepSleep,Sleep instruction is necessary, please do not delete!!!
-    delay(2000); //2s  
     
-//////////////////////Partial refresh digital presentation//////////////////////////////////////  
-    EPD_HW_Init(); //Electronic paper initialization
-    EPD_SetRAMValue_BaseMap(gImage_basemap);  //Partial refresh background color,Brush map is a must, please do not delete
-    for(fen_H=0;fen_H<6;fen_H++)
-    {
-    for(fen_L=0;fen_L<10;fen_L++)
-    {
-    for(miao_H=0;miao_H<6;miao_H++)   
-    {
-    for(miao_L=0;miao_L<10;miao_L++)
-    {
-        EPD_Dis_Part_myself(32,92,(unsigned char *)&Num[miao_L],         //x-A,y-A,DATA-A
-                            32,124,(unsigned char *)&Num[miao_H],         //x-B,y-B,DATA-B
-                            32,164,(unsigned char *)gImage_numdot,       //x-C,y-C,DATA-C
-                            32,206,(unsigned char *)&Num[fen_L],         //x-D,y-D,DATA-D
-                            32,238,(unsigned char *)&Num[fen_H],32,64);  //x-E,y-E,DATA-E,Resolution 32*64
-                            
-                            if((fen_L==0)&&(miao_H==0)&&(miao_L==5))
-                            goto Clear;
-      }
-    }
-    }
-    
-    }  
+    while(1); 
   ////////////////////////////////////////////////////////////////////////  
       //Clean
-    Clear:
-    delay(2000);
-    EPD_HW_Init();//Electronic paper initialization
-    EPD_WhiteScreen_White();  //Show all white
-    EPD_DeepSleep();  //Enter deep sleep,Sleep instruction is necessary, please do not delete!!!
-    while(1); 
+    // Clear:
+    // delay(2000);
+    // EPD_HW_Init();//Electronic paper initialization
+    // EPD_WhiteScreen_White();  //Show all white
+   //  EPD_DeepSleep();  //Enter deep sleep,Sleep instruction is necessary, please do not delete!!!
 }
 
 
