@@ -6472,7 +6472,7 @@
 			(net 4 "+3V3")
 			(pinfunction "VO")
 			(pintype "power_out")
-			(uuid "62ac8e59-938a-4905-a30f-280b561c97bc")
+			(uuid "fe4d2b98-6618-469d-913b-fc8f05099c01")
 		)
 		(pad "3" smd roundrect
 			(at -3.15 -2.3 135)
@@ -34434,6 +34434,117 @@
 				(italic yes)
 			)
 			(justify bottom mirror)
+		)
+	)
+	(dimension
+		(type orthogonal)
+		(layer "Eco2.User")
+		(uuid "4085faf5-d7ed-4f2e-822c-58d7617991d8")
+		(pts
+			(xy 142.262473 70.689659) (xy 67.262473 70.689659)
+		)
+		(height -22.439659)
+		(orientation 0)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.1)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(arrow_direction outward)
+			(extension_height 0.58642)
+			(extension_offset 0.5)
+			(keep_text_aligned yes)
+		)
+		(gr_text "75.0000 mm"
+			(at 104.762473 47.1 0)
+			(layer "Eco2.User")
+			(uuid "4085faf5-d7ed-4f2e-822c-58d7617991d8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+	)
+	(dimension
+		(type orthogonal)
+		(layer "Eco2.User")
+		(uuid "5cb18fe6-6cc6-4bb7-a360-1e291861a744")
+		(pts
+			(xy 67.262473 70.689659) (xy 74.012473 140.189659)
+		)
+		(height -13.942473)
+		(orientation 1)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.1)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(arrow_direction outward)
+			(extension_height 0.58642)
+			(extension_offset 0.5)
+			(keep_text_aligned yes)
+		)
+		(gr_text "69.5000 mm"
+			(at 52.17 105.439659 90)
+			(layer "Eco2.User")
+			(uuid "5cb18fe6-6cc6-4bb7-a360-1e291861a744")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+	)
+	(dimension
+		(type orthogonal)
+		(layer "Eco2.User")
+		(uuid "e1633705-1ab6-43e4-849d-2e994b726f92")
+		(pts
+			(xy 134.012473 140.189659) (xy 74.012473 140.189659)
+		)
+		(height 17.500341)
+		(orientation 0)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.1)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(arrow_direction outward)
+			(extension_height 0.58642)
+			(extension_offset 0.5)
+			(keep_text_aligned yes)
+		)
+		(gr_text "60.0000 mm"
+			(at 104.012473 156.54 0)
+			(layer "Eco2.User")
+			(uuid "e1633705-1ab6-43e4-849d-2e994b726f92")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
 		)
 	)
 	(via

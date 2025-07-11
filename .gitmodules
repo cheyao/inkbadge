@@ -1,0 +1,6 @@
+[submodule "firmware/GxEPD2"]
+	path = firmware/GxEPD2
+	url = https://github.com/ZinggJM/GxEPD2
+[submodule "firmware/Adafruit-GFX-Library"]
+	path = firmware/Adafruit-GFX-Library
+	url = https://github.com/adafruit/Adafruit-GFX-Library
