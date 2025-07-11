@@ -127,6 +127,8 @@ void drawBMPFromMemory(const uint8_t *bmpData) {
 
 #include "badge.h"
 
+String input = "";
+
 void reDraw() {
   // NOTE: set rotation of display here, idk what the correct setting it is on the hardware
   display.setRotation(2);
@@ -145,22 +147,23 @@ void reDraw() {
   display.setCursor(10, 10);
   display.setTextSize(2);
   display.setTextColor(EPD_BLACK);
-  display.print("NONAME");
+  display.print(input);
   display.display();
 
   delay(2000);
 }
+
 void setup() {
   // Open serial communications and wait for port to open
   Serial.begin(115200);
 
   stripr.begin();
-  stripr.setBrightness(50);
   stripr.show();
+
   stripl.begin();
-  stripl.setBrightness(50);
   stripl.show();
 
+  /*
   // Set up SPI pins for the SD card
   SPI1.setMISO(_MISO_SD);
   SPI1.setMOSI(_MOSI_SD);
@@ -171,15 +174,43 @@ void setup() {
   display.begin();
 
   reDraw();
+
+  Serial.println("Enter your name and press ENTER:");
+  while (true) {
+    while (Serial.available()) {
+      char c = Serial.read();
+      if (c == '\n' || c == '\r') {
+        if (input.length() > 0) break;
+      } else {
+        input += c;
+        Serial.print(c); // Echo back
+      }
+    }
+
+    if (input.length() > 0 && (input.endsWith("\n") || input.endsWith("\r"))) {
+      break;
+    }
+
+    delay(10);
+  }
+
+  input.trim(); // Remove any newline/whitespace
+  Serial.print("\nSaving name: ");
+  Serial.println(input);
+
+  reDraw(); // Refresh the screen with new name
+            */
 }
 
 void colorWipe(uint32_t c, uint8_t wait) {
   for(uint16_t i=0; i<stripl.numPixels(); i++) {
     stripl.setPixelColor(i, c);
     stripl.show();
+
     stripr.setPixelColor(i, c);
     stripr.show();
-    delay(wait);
+
+    delay(20);
   }
 }
 
