@@ -55,7 +55,8 @@ constexpr const int NEOPIXEL_L = 16;
 Adafruit_NeoPixel stripl = Adafruit_NeoPixel(3, NEOPIXEL_L, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel stripr = Adafruit_NeoPixel(3, NEOPIXEL_R, NEO_GRB + NEO_KHZ800);
 
-// SPIClassRP2040(spi_inst_t *spi, pin_size_t rx, pin_size_t cs, pin_size_t sck, pin_size_t tx);
+SPISettings spisettings(1000000, MSBFIRST, SPI_MODE0);
+
 SPIClassRP2040 SPIn(spi1, _MISO_EPD, _CS_EPD, _SCK_EPD, _MOSI_EPD);
 
 void setup() {
